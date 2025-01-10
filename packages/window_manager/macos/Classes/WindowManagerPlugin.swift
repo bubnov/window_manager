@@ -64,6 +64,9 @@ public class WindowManagerPlugin: NSObject, FlutterPlugin {
             windowManager.close()
             result(true)
             break
+        case "isHidingToolbarInFoolscreen":
+            result(windowManager.isHidingToolbarInFoolscreen())
+            break
         case "isPreventClose":
             result(windowManager.isPreventClose())
             break

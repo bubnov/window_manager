@@ -68,6 +68,7 @@ public class WindowManager: NSObject, NSWindowDelegate {
     private var _isPreventClose: Bool = false
     private var _isMaximized: Bool = false
     private var _isMaximizable: Bool = true
+    private var _hideToolbarInFoolscreen: Bool = false
     
     override public init() {
         super.init()
@@ -96,6 +97,14 @@ public class WindowManager: NSObject, NSWindowDelegate {
     
     public func close() {
         mainWindow.performClose(nil)
+    }
+
+    public func isHidingToolbarInFoolscreen() -> Bool {
+        return _hideToolbarInFoolscreen;
+    }
+    
+    public func setHideToolbarInFoolscreen(_ args: [String: Any]) {
+        _hideToolbarInFoolscreen = args["isHidingToolbarInFoolscreen"] as! Bool
     }
     
     public func isPreventClose() -> Bool {
@@ -583,6 +592,15 @@ public class WindowManager: NSObject, NSWindowDelegate {
     
     public func windowDidDeminiaturize(_ notification: Notification) {
         _emitEvent("restore");
+    }
+
+    public func window(
+        _ window: NSWindow, 
+        willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []
+    ) -> NSApplication.PresentationOptions {
+        return _hideToolbarInFoolscreen 
+            ? [.autoHideToolbar, .autoHideMenuBar, .fullScreen] 
+            : proposedOptions
     }
     
     public func windowDidEnterFullScreen(_ notification: Notification){
